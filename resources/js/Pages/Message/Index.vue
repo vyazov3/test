@@ -5,10 +5,10 @@
     <div v-if="messages.length > 0" class="w-1/2 mx-auto py-6">
         <div class="message">
             <div class="message__text">
-                <div class="flex" v-for="message in messages">
+                <div class="flex border-b border-3" v-for="message in messages">
                     <p>{{ message.id }}.</p>
                     <p>{{ message.message }}.</p>
-                    <p class="text-right">{{ message.created_at }}</p>
+                    <p class="text-right">{{ message.time }}</p>
                 </div>
             </div>
             <div class="message__user"></div>
@@ -39,11 +39,18 @@ import axios from 'axios';
                 message: ''
             }
         },
+        created() {
+            window.Echo.channel('store_message')
+            .listen('.store_message', res => {
+                this.messages.unshift(res.message)
+            })
+        },
         methods: {
             store() {
-                axios.post('/messages', {'message': this.message})
+                axios.post('/messages', {message: this.message})
                 .then(res => {
                     this.messages.unshift(res.data)
+                    this.message = ''
                 })
             }
         }

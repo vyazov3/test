@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,6 +33,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/users', [UserController::class,'index'])->name('user.index');
     Route::get('/messages', [MessageController::class,'index'])->name('messages.index');
     Route::post('/messages', [MessageController::class,'store'])->name('messages.store');
 

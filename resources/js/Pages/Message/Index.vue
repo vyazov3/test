@@ -1,0 +1,56 @@
+<template>
+    <div class="message__title w-1/2 mx-auto py-6">
+        Messages
+    </div>
+    <div v-if="messages.length > 0" class="w-1/2 mx-auto py-6">
+        <div class="message">
+            <div class="message__text">
+                <div class="flex" v-for="message in messages">
+                    <p>{{ message.id }}.</p>
+                    <p>{{ message.message }}.</p>
+                    <p class="text-right">{{ message.created_at }}</p>
+                </div>
+            </div>
+            <div class="message__user"></div>
+            <div class="message__date"></div>
+        </div>
+    </div>
+    <div v-else class="w-1/2 mx-auto py-6">
+        <div class="message__error">
+            Oooooops, история сообщений отсутствует. Напишите первым!
+        </div>
+    </div>
+    <div class="w-1/2 mx-auto py-6">
+        <div class="flex">
+            <input v-model="message" class="border border-dark rounded-lg" type="text" placeholder="Write msg...">
+            <a @click="store" href="#" class="bg-sky-400 text-white text-center p-5 ml-2 rounded-lg">Send</a>
+        </div>
+    </div>
+</template>
+<script>
+import axios from 'axios';
+    export default {
+        name: "Index",
+        props: [
+            "messages"
+        ],
+        data() {
+            return {
+                message: ''
+            }
+        },
+        methods: {
+            store() {
+                axios.post('/messages', {'message': this.message})
+                .then(res => {
+                    this.messages.unshift(res.data)
+                })
+            }
+        }
+    }
+
+</script>
+
+<style scoped>
+
+</style>

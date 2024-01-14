@@ -51,7 +51,7 @@ import axios from 'axios';
         },
         methods: {
             store() {
-                axios.post('/messages', {message: this.message, user_id: this.$page.props.auth.user.id})
+                axios.post('/messages/chat/1', {message: this.message, user_id: this.$page.props.auth.user.id})
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''

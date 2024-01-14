@@ -17,8 +17,8 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index(User $user) {
-        $messages = Message::latest()->get();
+    public function index(Chat $chat) {
+        $messages = Message::where('chat_id', $chat->id)->get();
         foreach ($messages as $message) {
             $message['name'] = $message->user->name;
         }

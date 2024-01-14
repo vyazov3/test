@@ -44,12 +44,11 @@ class ChatController extends Controller
 
     public function createChat(User $user)
     {
-        $chat_id = $this->createChat()->id;
+        $chat_id = $this->createChatName();
         $this->inviteChat($user->id, $chat_id);
         $this->inviteChat(Auth::user()->id, $chat_id);
-        $users = $this->findUsersInChat($chat_id);
 
-        return redirect()->route('messages.index');
+        return redirect()->route('messages.index', ['chat' => $chat_id]);
     }
     public function index(User $user)
     {

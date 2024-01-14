@@ -37,9 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class,'index'])->name('user.index');
     Route::get('/messages/{user}', [ChatController::class, 'createChat'])->name('create_chat');
 
-    Route::get('/messages/chat/{user}', [MessageController::class,'index'])->name('messages.index')
+    Route::get('/messages/chat/{chat}', [MessageController::class,'index'])->name('messages.index')
         ->where('user', '[0-9]+');
-    Route::post('/messages/chat/{user}', [MessageController::class,'store'])->name('messages.store');
+    Route::post('/messages/chat/{chat}', [MessageController::class,'store'])->name('messages.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

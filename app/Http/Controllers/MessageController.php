@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\StoreMessageEvent;
 use App\Http\Requests\Message\StoreRequest;
+use App\Http\Resources\MessageUserResource;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\MessageResource;
@@ -14,7 +16,10 @@ class MessageController extends Controller
 {
     public function index() {
         $messages = Message::latest()->get();
-        $messages = MessageResource::collection($messages)->resolve();
+        foreach ($messages as $message) {
+            $message['name'] = $message->user->name;
+        }
+        $messages = MessageUserResource::collection($messages)->resolve();
         return inertia('Message/Index', compact('messages'));
     }
     public function store(StoreRequest $request) {

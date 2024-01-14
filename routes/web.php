@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -34,8 +35,12 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class,'index'])->name('user.index');
+
     Route::get('/messages', [MessageController::class,'index'])->name('messages.index');
     Route::post('/messages', [MessageController::class,'store'])->name('messages.store');
+
+    Route::get('/users/{user}', [ChatController::class, 'index'])->name('chat')
+        ->where('user', '[0-9]+');;
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

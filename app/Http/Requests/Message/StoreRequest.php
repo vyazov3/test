@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'message' => 'required|string',
-            'user_id' => 'integer',
+            'user_id' => 'integer'
         ];
     }
 }

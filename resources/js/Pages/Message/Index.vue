@@ -6,7 +6,7 @@
         <div class="message">
             <div class="message__text">
                 <div class="flex border-b border-3" v-for="message in messages">
-                    <p>{{ message.user_id }}.</p>
+                    <p>{{ message.name }}.</p>
                     <p>{{ message.message }}.</p>
                     <p class="text-right">{{ message.time }}</p>
                 </div>
@@ -23,7 +23,7 @@
     <div class="w-1/2 mx-auto py-6">
         <div class="flex">
             <input v-model="message" class="border border-dark rounded-lg" type="text" placeholder="Write msg...">
-            <a @click="store" href="#" class="bg-sky-400 text-white text-center p-5 ml-2 rounded-lg">Send</a>
+            <a @click.prevent="store" href="#" class="bg-sky-400 text-white text-center p-5 ml-2 rounded-lg">Send</a>
         </div>
     </div>
 </template>
@@ -32,7 +32,8 @@ import axios from 'axios';
     export default {
         name: "Index",
         props: [
-            "messages"
+            "messages",
+            "user"
         ],
         data() {
             return {

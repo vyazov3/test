@@ -4,7 +4,7 @@
         <div class="message">
             <div class="message__text">
                 <div v-for="user in users">
-                    <a :href="`http://127.0.0.1:8000/users/${user.id}`" class="flex border-b border-3">
+                    <a :href="`http://127.0.0.1:8000/messages/${user.id}`" class="flex border-b border-3">
                         <p>{{ user.name }}</p>
                     </a>
                 </div>
@@ -19,7 +19,7 @@
     export default {
         name: "Index",
         props: [
-            "users"
+            "users",
         ],
     }
 

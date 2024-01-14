@@ -10,6 +10,10 @@
                     <p>{{ message.message }}.</p>
                     <p class="text-right">{{ message.time }}</p>
                 </div>
+<!--                Участники-->
+<!--                <div v-for="user in users">-->
+<!--                    {{ user.name }}-->
+<!--                </div>-->
             </div>
             <div class="message__user"></div>
             <div class="message__date"></div>
@@ -33,7 +37,6 @@ import axios from 'axios';
         name: "Index",
         props: [
             "messages",
-            "user"
         ],
         data() {
             return {

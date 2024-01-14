@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Events\StoreMessageEvent;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Resources\MessageUserResource;
+use App\Http\Resources\UserResource;
+use App\Models\Chat;
+use App\Models\ChatUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,12 +17,13 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index() {
+    public function index(User $user) {
         $messages = Message::latest()->get();
         foreach ($messages as $message) {
             $message['name'] = $message->user->name;
         }
         $messages = MessageUserResource::collection($messages)->resolve();
+
         return inertia('Message/Index', compact('messages'));
     }
     public function store(StoreRequest $request) {

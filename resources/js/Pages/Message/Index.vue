@@ -6,7 +6,7 @@
         <div class="message">
             <div class="message__text">
                 <div class="flex border-b border-3" v-for="message in messages">
-                    <p>{{ message.name }}.</p>
+                    <p>{{ message.user_id }}.</p>
                     <p>{{ message.message }}.</p>
                     <p class="text-right">{{ message.time }}</p>
                 </div>
@@ -47,11 +47,10 @@ import axios from 'axios';
         },
         methods: {
             store() {
-                axios.post('/messages', {message: this.message, user_id: this.$id})
+                axios.post('/messages', {message: this.message, user_id: this.$page.props.auth.user.id})
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''
-
                 })
             }
         }

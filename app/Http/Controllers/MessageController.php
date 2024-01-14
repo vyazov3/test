@@ -19,7 +19,6 @@ class MessageController extends Controller
     }
     public function store(StoreRequest $request) {
         $data = $request->validated();
-        $data['user_id'] = Auth::user()->id;
         $message = Message::create($data);
         broadcast(new StoreMessageEvent($message))->toOthers();
         return MessageResource::make($message)->resolve();

@@ -34,6 +34,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('messages', function (Blueprint $table) {
+            $table->dropForeign('chat_message_user_fk');
+            $table->dropForeign('chat_message_chat_fk');
+            
+        });
         Schema::dropIfExists('messages');
     }
 };

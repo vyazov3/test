@@ -11,6 +11,9 @@ class Chat extends Model
     use HasFactory;
     protected $guarded = [];
     public $table = 'chats';
+    public $casts = [
+        'is_publish'=> 'boolean'
+    ];
 
     public function user(): BelongsToMany
     {

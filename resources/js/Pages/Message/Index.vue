@@ -2,7 +2,6 @@
     <div class="message__title w-1/2 mx-auto py-6">
         Messages
     </div>
-    
     <div v-if="messages.length > 0" class="w-1/2 mx-auto py-6">
         <div class="message">
             <div class="message__text">
@@ -43,7 +42,6 @@ import axios from 'axios';
             }
         },
         created() {
-            console.log(window.location.pathname.split('/').pop());
             window.Echo.channel('store_message')
             .listen('.store_message', res => {
                 this.messages.unshift(res.message)
@@ -51,15 +49,15 @@ import axios from 'axios';
         },
         methods: {
             store() {
-                var currentUrl = window.location.pathname.split('/').pop();
-                axios.post('/messages/chat/1', {message: this.message, user_id: this.$page.props.auth.user.id, chat_id: currentUrl})
+                var currentUrl = window.location.pathname.split('/').pop()
+                axios.post(`/messages/chat`, {message: this.message, user_id: this.$page.props.auth.user.id, chat_id: currentUrl})
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''
                 })
                 .catch(error => {
-                    this.errorMessage = error.message;
-                    console.error("There was an error!", error);
+                    this.errorMessage = error.message
+                    console.error("There was an error!", error)
                 })
             }
         }

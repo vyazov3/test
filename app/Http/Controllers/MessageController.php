@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 class MessageController extends Controller
 {
     public function index(Chat $chat) {
-        $messages = Message::where('chat_id', $chat->id)->get();
+        $messages = Message::where('chat_id', $chat->id)->latest()->get();
         foreach ($messages as $message) {
             $message['name'] = $message->user->name;
         }
@@ -29,7 +29,8 @@ class MessageController extends Controller
     public function store(StoreRequest $request) {
         $data = $request->validated();
         $message = Message::create($data);
+        $message['name'] =  $message->user->name;
         broadcast(new StoreMessageEvent($message))->toOthers();
-        return MessageResource::make($message)->resolve();
+        return MessageUserResource::make($message)->resolve();
     }
 }

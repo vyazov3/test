@@ -6,17 +6,15 @@
         <div class="message">
             <div class="message__text">
                 <div class="flex border-b border-3" v-for="message in messages">
-                    <p>{{ message.name }}.</p>
-                    <p>{{ message.message }}.</p>
-                    <p class="text-right">{{ message.time }}</p>
+                    <div class="message__user">{{ message.name }}.</div>
+                    <div class="message__text">{{ message.message }}.</div>
+                    <div class="message__time text-right">{{ message.time }}</div>
                 </div>
 <!--                Участники-->
 <!--                <div v-for="user in users">-->
 <!--                    {{ user.name }}-->
 <!--                </div>-->
             </div>
-            <div class="message__user"></div>
-            <div class="message__date"></div>
         </div>
     </div>
     <div v-else class="w-1/2 mx-auto py-6">
@@ -44,6 +42,7 @@ import axios from 'axios';
             }
         },
         created() {
+            console.log(window.location.pathname.split('/').pop());
             window.Echo.channel('store_message')
             .listen('.store_message', res => {
                 this.messages.unshift(res.message)
@@ -56,6 +55,10 @@ import axios from 'axios';
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''
+                })
+                .catch(error => {
+                    this.errorMessage = error.message;
+                    console.error("There was an error!", error);
                 })
             }
         }

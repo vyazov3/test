@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Broadcast;
+use mysql_xdevapi\Collection;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+Broadcast::channel('App.Models.User.{id}', function ($user, $id){
     return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('store_message_{chat_id}', function ($user, $chat_id) {
+    return collect(ChatController::findUsersInChat($chat_id))->contains('user_id', $user->id);
 });

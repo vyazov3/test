@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddChat;
+use App\Http\Resources\UserCheckRes;
 use App\Http\Resources\UserResource;
 use App\Models\Chat;
 use App\Models\ChatUser;
@@ -12,13 +14,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    private function findUsersInChat($chat_id)
+    public static function findUsersInChat($chat_id)
     {
         $users = ChatUser::where('chat_id', $chat_id)->get();
         foreach ($users as $user) {
             $user['name'] = $user->user->name;
         }
-        return UserResource::collection($users)->resolve();
+
+        return UserCheckRes::collection($users)->resolve();
     }
 
     private function inviteChat($user_id, $chat_id)
@@ -36,25 +39,24 @@ class ChatController extends Controller
 
     public function createChat(User $user)
     {
-
         $new = ChatUser::where('user_id', $user->id)->get();
         $cur = ChatUser::where('user_id', Auth::user()->id)->get();
         $hlp = false;
         $merg = $new->merge($cur)->groupBy('chat_id');
+
         foreach ($merg as $value) {
             if ($value->count() >= 2) {
                 $hlp = true;
                 $chat_id = $value[0]['chat_id'];
             }
         }
+
         if (!$hlp) {
             $chat_id = $this->createChatsssss();
             $this->inviteChat($user->id, $chat_id);
             $this->inviteChat(Auth::user()->id, $chat_id);
-            return redirect()->route('messages.index', ['chat' => $chat_id]);
-        } else {
-            return redirect()->route('messages.index', ['chat' => $chat_id]);
         }
+        return redirect()->route('messages.index', ['chat' => $chat_id]);
     }
     public function index(User $user)
     {

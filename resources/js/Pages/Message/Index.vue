@@ -1,8 +1,8 @@
 <template>
     <div class="message__title w-1/2 mx-auto py-6">
-        Messages
+        {{ chat_name }}
     </div>
-    
+
     <div v-if="messages.length > 0" class="w-1/2 mx-auto py-6">
         <div class="message">
             <div class="message__text">
@@ -36,6 +36,7 @@ import axios from 'axios';
         name: "Index",
         props: [
             "messages",
+            "chat_name"
         ],
         data() {
             return {
@@ -43,8 +44,8 @@ import axios from 'axios';
             }
         },
         created() {
-            console.log(window.location.pathname.split('/').pop());
-            window.Echo.channel('store_message')
+            var chat_id = window.location.pathname.split('/').pop();
+            window.Echo.private(`store_message_${chat_id}`)
             .listen('.store_message', res => {
                 this.messages.unshift(res.message)
             })
@@ -52,7 +53,11 @@ import axios from 'axios';
         methods: {
             store() {
                 var currentUrl = window.location.pathname.split('/').pop();
-                axios.post('/messages/chat/1', {message: this.message, user_id: this.$page.props.auth.user.id, chat_id: currentUrl})
+                axios.post(`/messages/chat/${currentUrl}`, {
+                    message: this.message,
+                    user_id: this.$page.props.auth.user.id,
+                    chat_id: currentUrl
+                })
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''

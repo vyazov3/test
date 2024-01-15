@@ -51,7 +51,8 @@ import axios from 'axios';
         },
         methods: {
             store() {
-                axios.post('/messages/chat/1', {message: this.message, user_id: this.$page.props.auth.user.id})
+                var currentUrl = window.location.pathname.split('/').pop();
+                axios.post('/messages/chat/1', {message: this.message, user_id: this.$page.props.auth.user.id, chat_id: currentUrl})
                 .then(res => {
                     this.messages.unshift(res.data)
                     this.message = ''

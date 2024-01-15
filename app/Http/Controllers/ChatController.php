@@ -43,13 +43,11 @@ class ChatController extends Controller
         $merg = $new->merge($cur)->groupBy('chat_id');
         foreach ($merg as $value) {
             if ($value->count() >= 2) {
-                dump('чат существует');
                 $hlp = true;
                 $chat_id = $value[0]['chat_id'];
             }
         }
         if (!$hlp) {
-            dump('нет чата, создаем');
             $chat_id = $this->createChatsssss();
             $this->inviteChat($user->id, $chat_id);
             $this->inviteChat(Auth::user()->id, $chat_id);

@@ -2,6 +2,7 @@
     <div class="message__title w-1/2 mx-auto py-6">
         Messages
     </div>
+    
     <div v-if="messages.length > 0" class="w-1/2 mx-auto py-6">
         <div class="message">
             <div class="message__text">

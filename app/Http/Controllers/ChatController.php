@@ -45,7 +45,7 @@ class ChatController extends Controller
             and chats.is_publish=false"));
         if(empty($chat_id))
         {
-            $chat_id = $this->createChat();
+            $chat_id = $this->createChatsssss();
             $this->inviteChat($user->id, $chat_id);
             $this->inviteChat(Auth::user()->id, $chat_id);
             return redirect()->route('messages.index', ['chat' => $chat_id]);

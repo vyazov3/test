@@ -24,13 +24,13 @@ class MessageController extends Controller
         }
         $messages = MessageUserResource::collection($messages)->resolve();
         $chat_name = $chat->title;
-
         return inertia('Message/Index', compact('messages', 'chat_name'));
     }
     public function store(Chat $chat, StoreRequest $request) {
         $data = $request->validated();
         $message = Message::create($data);
         $message['name'] =  $message->user->name;
+
         broadcast(new StoreMessageEvent($message, $chat->id))->toOthers();
         return MessageUserResource::make($message)->resolve();
     }

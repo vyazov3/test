@@ -53,6 +53,7 @@ import axios from 'axios';
         methods: {
             store() {
                 var currentUrl = window.location.pathname.split('/').pop();
+
                 axios.post(`/messages/chat/${currentUrl}`, {
                     message: this.message,
                     user_id: this.$page.props.auth.user.id,

@@ -39,7 +39,7 @@ class MessageController extends Controller
 
         //$message->append('name',$message->user->name);
 
-        $message->setAttribute('name','blabla');
+//        $message->setAttribute('name','blabla');
 
         broadcast(new StoreMessageEvent($message, $chat->id))->toOthers();
 

@@ -36,9 +36,13 @@ class MessageController extends Controller
     public function store(Chat $chat, StoreRequest $request) {
         $data = $request->validated();
         $message = Message::create($data);
-        $message['name'] =  $message->user->name;
+
+        //$message->append('name',$message->user->name);
+
+        $message->setAttribute('name','blabla');
 
         broadcast(new StoreMessageEvent($message, $chat->id))->toOthers();
+
         return MessageUserResource::make($message)->resolve();
     }
 }

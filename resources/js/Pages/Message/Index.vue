@@ -47,6 +47,7 @@ import axios from 'axios';
             var chat_id = window.location.pathname.split('/').pop();
             window.Echo.private(`store_message_${chat_id}`)
             .listen('.store_message', res => {
+                console.log(res);
                 this.messages.push(res.message)
             })
         },

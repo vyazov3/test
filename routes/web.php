@@ -34,7 +34,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/asd/{id}', [ChatController::class, 'findUsersInChat']);
+//    Route::get('/asd/{id}', [ChatController::class, 'findUsersInChat']);
 
     Route::get('/users', [UserController::class,'index'])->name('user.index');
     Route::get('/messages/{user}', [ChatController::class, 'createChat'])->name('create_chat');

@@ -16,15 +16,15 @@ use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
-    public static function findUsersInChat($chat_id)
+    public static function findUsersInChat(Chat $chat)
     {
-        $users = ChatUser::where('chat_id', $chat_id)->get();
+        $users = ChatUser::where('chat_id', $chat->id)->get();
         return UserCheckRes::collection($users)->resolve();
     }
 
     private function inviteChat($user_id, $chat_id)
     {
-        ChatUser::insert([
+        ChatUser::create([
             'user_id' => $user_id,
             'chat_id' => $chat_id
         ]);
@@ -37,35 +37,20 @@ class ChatController extends Controller
 
     public function createChat(User $user)
     {
-        // $new = ChatUser::where('user_id', $user->id)->get();
-        // $cur = ChatUser::where('user_id', Auth::user()->id)->get();
-
-        $user_new = ChatUser::where(['user_id'=> $user->id])->get();
-        $user_cur = ChatUser::where(['user_id'=> auth()->user()->id])->get();
-
-
-        $collection = $user_new->merge($user_cur);
-
-        $chatExists = $collection->groupBy('chat_id')->where(function($chats){
-
-            $exists = $chats->where(function($z){
-                return $z->chat->is_publish === false;
-            })->isNotEmpty();
-
-            return $exists;
-
-        });
-
-
-        if($chatExists->isEmpty())
+        $curuser = auth()->user()->id;
+        $chat_id = (DB::select("SELECT chat_users.chat_id FROM chat_users
+            JOIN chats on chat_users.chat_id = chats.id
+            WHERE user_id={$user->id}
+            and chat_id in (SELECT chat_id FROM chat_users WHERE user_id={$curuser})
+            and chats.is_publish=false"));
+        if(empty($chat_id))
         {
-            $chat_id = $this->createChatsssss();
+            $chat_id = $this->createChat();
             $this->inviteChat($user->id, $chat_id);
             $this->inviteChat(Auth::user()->id, $chat_id);
             return redirect()->route('messages.index', ['chat' => $chat_id]);
-        } else {
-            return redirect()->route('messages.index', ['chat' => $chatExists->first()->first()->chat->id]);
         }
+        return redirect()->route('messages.index', ['chat' => $chat_id[0]->chat_id]);
     }
     public function index(User $user)
     {

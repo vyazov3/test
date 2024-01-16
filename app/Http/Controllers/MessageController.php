@@ -17,20 +17,27 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    public static function checkUser($chat_id)
+    {
+        return collect(ChatController::findUsersInChat($chat_id))->contains('user_id', Auth::user()->id);
+    }
     public function index(Chat $chat) {
-        $messages = Message::where('chat_id', $chat->id)->latest()->get();
-        foreach ($messages as $message) {
-            $message['name'] = $message->user->name;
+        if (MessageController::checkUser($chat)) {
+            $messages = Message::where('chat_id', $chat->id)->get();
+            foreach ($messages as $message) {
+                $message['name'] = $message->user->name;
+            }
+            $messages = MessageUserResource::collection($messages)->resolve();
+            $chat_name = $chat->title;
+            return inertia('Message/Index', compact('messages', 'chat_name'));
         }
-        $messages = MessageUserResource::collection($messages)->resolve();
-        $chat_name = $chat->title;
-
-        return inertia('Message/Index', compact('messages', 'chat_name'));
+        return redirect()->route('dashbord');
     }
     public function store(Chat $chat, StoreRequest $request) {
         $data = $request->validated();
         $message = Message::create($data);
         $message['name'] =  $message->user->name;
+
         broadcast(new StoreMessageEvent($message, $chat->id))->toOthers();
         return MessageUserResource::make($message)->resolve();
     }

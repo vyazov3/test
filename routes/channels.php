@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Models\Chat;
 use Illuminate\Support\Facades\Broadcast;
 use mysql_xdevapi\Collection;
 
@@ -20,5 +21,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id){
 });
 
 Broadcast::channel('store_message_{chat_id}', function ($user, $chat_id) {
-    return collect(ChatController::findUsersInChat($chat_id))->contains('user_id', $user->id);
+    return collect(ChatController::findUsersInChat(Chat::find($chat_id)))->contains('user_id', $user->id);
 });
